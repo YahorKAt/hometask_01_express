@@ -49,7 +49,7 @@ videosRouter
         const index = db.videos.findIndex(video => video.id === +req.params.id);
 
         if (index === -1) {
-            return res.status(HttpStatus.NotFound).send(createErrorMessages([{field: 'id', message: 'Driver not found'}]));
+            return res.status(HttpStatus.NotFound)
         }
 
         const errors = validateUpdateVideoInputDto(req.body);
