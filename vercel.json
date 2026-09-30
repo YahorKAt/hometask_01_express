@@ -1,0 +1,16 @@
+{
+  "version": 2,
+  "name": "hometask-01-express",
+  "builds": [
+    {
+      "src": "app.js",
+      "use": "@vercel/node"
+    }
+  ],
+  "routes": [
+    {
+      "src": "/(.*)",
+      "dest": "/app.js"
+    }
+  ]
+}
