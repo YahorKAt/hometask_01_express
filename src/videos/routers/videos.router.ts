@@ -13,11 +13,10 @@ videosRouter
         res.status(HttpStatus.Ok).send(db.videos);
     })
 
-    .get('/:id', (req: Request<{ id: number }>, res: Response) => {
+    .get('/:id', (req: Request<{ id: string }>, res: Response) => {
         const video = db.videos.find((video) => video.id === +req.params.id);
         if (!video) {
-            res.status(HttpStatus.NotFound);
-            return;
+            return res.sendStatus(HttpStatus.NotFound);
         }
         res.status(HttpStatus.Ok).send(video);
     })
@@ -26,8 +25,7 @@ videosRouter
         const errors = validateCreateVideoInputDto(req.body);
 
         if (errors.length > 0) {
-            res.status(HttpStatus.BadRequest).send(createErrorMessages(errors));
-            return;
+            return res.status(HttpStatus.BadRequest).send(createErrorMessages(errors));
         }
 
         const lastVideo = db.videos[db.videos.length - 1]
@@ -35,7 +33,7 @@ videosRouter
         const newVideo: Video = {
             id: lastVideo ? lastVideo.id + 1 : 1,
             author: req.body.author,
-            title: req.body.author,
+            title: req.body.title,
             availableResolutions: req.body.availableResolutions,
             createdAt: new Date().toISOString(),
             publicationDate: new Date(new Date().getTime() + 24 * 60 * 60 * 1000).toISOString(),
@@ -51,29 +49,26 @@ videosRouter
         const index = db.videos.findIndex(video => video.id === +req.params.id);
 
         if (index === -1) {
-            res.status(HttpStatus.NotFound).send(createErrorMessages([{field: 'id', message: 'Driver not found'}]));
-            return;
+            return res.status(HttpStatus.NotFound).send(createErrorMessages([{field: 'id', message: 'Driver not found'}]));
         }
 
         const errors = validateUpdateVideoInputDto(req.body);
 
         if (errors.length > 0) {
-            res.status(HttpStatus.BadRequest).send(createErrorMessages(errors));
-            return;
+            return res.status(HttpStatus.BadRequest).send(createErrorMessages(errors));
         }
 
 
         db.videos[index] = {...db.videos[index], ...req.body};
-        res.status(HttpStatus.NoContent)
+        res.sendStatus(HttpStatus.NoContent)
     })
 
     .delete('/:id', (req: Request<{ id: number }>, res: Response) => {
         const index = db.videos.findIndex(video => video.id === +req.params.id);
         if (index === -1) {
-            res.status(HttpStatus.NotFound);
-            return
-        }
+            return res.sendStatus(HttpStatus.NotFound);
 
+        }
         db.videos.splice(index, 1);
-        res.status(HttpStatus.NoContent)
+        res.sendStatus(HttpStatus.NoContent)
     })
