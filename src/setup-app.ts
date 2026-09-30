@@ -11,8 +11,8 @@ export const setupApp = (app: Express) => {
         res.status(HttpStatus.Ok).send("Hello world!");
     });
 
-    app.use('/hometask_01/api/videos', videosRouter);
-    app.use('/hometask_01/api/testing', testingRouter);
+    app.use('/videos', videosRouter);
+    app.use('/testing', testingRouter);
 
     return app;
 };
