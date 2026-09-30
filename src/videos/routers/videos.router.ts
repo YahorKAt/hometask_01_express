@@ -10,7 +10,7 @@ export const videosRouter = Router({})
 
 videosRouter
     .get('', (req: Request, res: Response) => {
-        res.status(HttpStatus.Ok).send(db.videos);
+        res.status(HttpStatus.Ok).json(db.videos);
     })
 
     .get('/:id', (req: Request<{ id: string }>, res: Response) => {
@@ -18,14 +18,14 @@ videosRouter
         if (!video) {
             return res.sendStatus(HttpStatus.NotFound);
         }
-        res.status(HttpStatus.Ok).send(video);
+        res.status(HttpStatus.Ok).json(video);
     })
 
     .post('', (req: Request<{}, {}, CreateVideoInputModel>, res: Response) => {
         const errors = validateCreateVideoInputDto(req.body);
 
         if (errors.length > 0) {
-            return res.status(HttpStatus.BadRequest).send(createErrorMessages(errors));
+            return res.status(HttpStatus.BadRequest).json(createErrorMessages(errors));
         }
 
         const lastVideo = db.videos[db.videos.length - 1]
@@ -42,7 +42,7 @@ videosRouter
         }
 
         db.videos.push(newVideo);
-        res.status(HttpStatus.Created).send(newVideo);
+        res.status(HttpStatus.Created).json(newVideo);
     })
 
     .put('/:id', (req: Request<{ id: number }, {}, UpdateVideoInputModel>, res: Response) => {
