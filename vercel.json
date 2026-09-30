@@ -3,14 +3,14 @@
   "name": "hometask-01-express",
   "builds": [
     {
-      "src": "app.js",
+      "src": "api/index.ts",
       "use": "@vercel/node"
     }
   ],
   "routes": [
     {
       "src": "/(.*)",
-      "dest": "/app.js"
+      "dest": "api/index.ts"
     }
   ]
 }
