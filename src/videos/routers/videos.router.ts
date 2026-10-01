@@ -19,6 +19,7 @@ videosRouter
             return res.sendStatus(HttpStatus.NotFound);
         }
         res.status(HttpStatus.Ok).json(video);
+        return
     })
 
     .post('', (req: Request<{}, {}, CreateVideoInputModel>, res: Response) => {
@@ -43,13 +44,17 @@ videosRouter
 
         db.videos.push(newVideo);
         res.status(HttpStatus.Created).json(newVideo);
+        return
     })
 
     .put('/:id', (req: Request<{ id: string }, {}, UpdateVideoInputModel>, res: Response) => {
         const index = db.videos.findIndex(video => video.id === +req.params.id);
 
         if (index === -1) {
-            return res.status(HttpStatus.NotFound).json(createErrorMessages([{field: 'id', message: 'Video not found'}]));
+            return res.status(HttpStatus.NotFound).json(createErrorMessages([{
+                field: 'id',
+                message: 'Video not found'
+            }]));
         }
 
         const errors = validateUpdateVideoInputDto(req.body);
@@ -61,6 +66,7 @@ videosRouter
 
         db.videos[index] = {...db.videos[index], ...req.body};
         res.sendStatus(HttpStatus.NoContent)
+        return
     })
 
     .delete('/:id', (req: Request<{ id: string }>, res: Response) => {
@@ -71,4 +77,5 @@ videosRouter
         }
         db.videos.splice(index, 1);
         res.sendStatus(HttpStatus.NoContent)
+        return
     })
